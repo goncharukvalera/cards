@@ -378,3 +378,12 @@ a {
 #tariffs b {
     display: block;
 }
+.t-popup {
+    opacity: 1;
+}
+.t-popup__container {
+    transform: translateY(-50%);
+}
+.t-popup__container img {
+    display: none;
+}
