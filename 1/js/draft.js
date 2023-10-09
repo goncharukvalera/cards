@@ -2010,6 +2010,12 @@ const serviceTr = [
         rus: 'Чтобы посмотреть результат, заполните форму',
         eng: 'To see the result, fill out the form',
         ge: 'Um das Ergebnis zu sehen, füllen Sie das Formular aus'
+    },
+    {
+        ua: 'Щоб використати ще 4 спроби, приєднайтесь до нашого ТГ бота і заберіть там свій бонус',
+        rus: 'Чтобы использовать еще 4 попытки, присоединитесь к нашему ТГ боту и заберите там свой бонус',
+        eng: 'To use 4 more attempts, join our TG bot and collect your bonus there',
+        ge: 'Um 4 weitere Versuche zu nutzen, treten Sie unserem TG-Bot bei und sammeln Sie dort Ihren Bonus'
     }
 ]
 const tariffsTr = [
@@ -2117,6 +2123,7 @@ jQuery.fn.reverse = [].reverse;
         message = $('#message'),
         reorderBtn = $('#reorder'),
         showResultBtn = $('#showResultBtn:not([disabled])'),
+        tgBotLink = $('#tgBotLink'),
         watchesLeft = WATCHES,
         reorderIteration = 0;
 
@@ -2128,6 +2135,7 @@ jQuery.fn.reverse = [].reverse;
     message.text(serviceTr[0][lang]);
     reorderBtn.text(serviceTr[4][lang]);
     showResultBtn.text(serviceTr[5][lang]);
+    tgBotLink.text(serviceTr[10][lang]);
 
     data.forEach((card, i) => {
         i && $barajaEl.append('<li data-i=' + i + '><img src="https://goncharukvalera.github.io/cards/2/images/' + i + '.jpg" alt="' + data[i][lang].name + '"/><h4>' + data[i][lang].name + '</h4></li>');
@@ -2268,10 +2276,15 @@ jQuery.fn.reverse = [].reverse;
                         $(this).addClass('flipped');
                         if (watchesLeft === WATCHES) {
                             message.text(serviceTr[9][lang]);
+                            showResultBtn.show();
                         } else {
-                            message.text('');
+                            if (userGroups.length === 1 && userGroups.includes('Bonus') || userGroups.includes('Personal') || userGroups.includes('Standard') || userGroups.includes('Business')) {
+                                message.text('');
+                                showResultBtn.show();
+                            } else {
+                                tgBotLink.show();
+                            }
                         }
-                        showResultBtn.show();
                     }
                 }
                 $('#result').slideUp();
@@ -2797,6 +2810,9 @@ jQuery.fn.reverse = [].reverse;
             } else {
                 localStorage.setItem('email', email);
                 console.log('success', email);
+                setTimeout(() => {
+                    $('.t-popup').fadeOut(300);
+                }, 500);
             }
         }, 500);
     });
@@ -2813,6 +2829,9 @@ jQuery.fn.reverse = [].reverse;
     if (userGroups.length === 1 && userGroups.includes('Bonus')) {
         $counter.show();
     }
+    if (userGroups.includes('Bonus') || userGroups.includes('Personal') || userGroups.includes('Standard') || userGroups.includes('Business')) {
+        tgBotLink.hide();
+    }
     const urlMocapi = 'https://64e680cb09e64530d1800ac4.mockapi.io';
     $.getJSON('https://api.ipify.org?format=json', data => {
         ip = data.ip;
@@ -2824,33 +2843,36 @@ jQuery.fn.reverse = [].reverse;
             setCount(watchesLeft);
         });
     });
+    const showResult = () => {
+        showResultBtn.hide();
+        let i = $('.flipped').data('i');
+        $('#result').html('<div><img src="https://goncharukvalera.github.io/cards/2/images/' + i + '.jpg" alt="' + data[i][lang].name + '"/><h4>' + data[i][lang]?.name + '</h4></div><span>' + serviceTr[3][lang] + ':</span><h4>' + data[i][lang]?.name + '</h4><p>' + data[i][lang]?.descr + '</p>').slideDown();
+
+        if (rec?.id) {
+            $.ajax({
+                url: `${urlMocapi}/ips/${rec.id}`,
+                type: `PUT`,
+                data: {watchesLeft, createdAt: +Date.now()},
+            }).done(function () {
+                setCount(watchesLeft);
+            });
+        } else {
+            $.post(`${urlMocapi}/ips`, {ip, watchesLeft, createdAt: +Date.now()}, function () {
+                setCount(watchesLeft);
+            });
+        }
+    }
     showResultBtn.on('click', function () {
         // $(this).removeAttr('disabled');
         if (watchesLeft === WATCHES && !localStorage.getItem('email')) {
-            $('#openClientContactsForm').trigger('click');
+            $('.t-popup').fadeIn(300);
         } else {
             watchesLeft--;
             if (!watchesLeft) {
                 $counter.html(`${serviceTr[7][lang]} <a href="#">${serviceTr[8][lang]}</a>`);
                 $(this).attr('disabled', 'disabled');
             } else {
-                $(this).hide();
-                let i = $('.flipped').data('i');
-                $('#result').html('<div><img src="https://goncharukvalera.github.io/cards/2/images/' + i + '.jpg" alt="' + data[i][lang].name + '"/><h4>' + data[i][lang]?.name + '</h4></div><span>' + serviceTr[3][lang] + ':</span><h4>' + data[i][lang]?.name + '</h4><p>' + data[i][lang]?.descr + '</p>').slideDown();
-
-                if (rec?.id) {
-                    $.ajax({
-                        url: `${urlMocapi}/ips/${rec.id}`,
-                        type: `PUT`,
-                        data: {watchesLeft, createdAt: +Date.now()},
-                    }).done(function () {
-                        setCount(watchesLeft);
-                    });
-                } else {
-                    $.post(`${urlMocapi}/ips`, {ip, watchesLeft, createdAt: +Date.now()}, function () {
-                        setCount(watchesLeft);
-                    });
-                }
+                showResult();
             }
         }
     });

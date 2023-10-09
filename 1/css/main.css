@@ -387,3 +387,15 @@ a {
 .t-popup__container img.t-img {
     display: none;
 }
+#tgBotLink {
+    display: none;
+    cursor: unset;
+    text-decoration: none;
+}
+#tgBotLink b {
+    cursor: pointer;
+    color: #2e5a7e;
+}
+#tgBotLink b:hover {
+    text-decoration: underline;
+}
