@@ -384,6 +384,6 @@ a {
 .t-popup__container {
     transform: translateY(-50%);
 }
-.t-popup__container img {
+.t-popup__container img.t-img {
     display: none;
 }
