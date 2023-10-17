@@ -351,20 +351,27 @@ a {
     letter-spacing: 2px
 }
 #tariffs {
-    display: none;
+    /*display: none;*/
+    text-align: center;
+}
+#tariffs > div {
+    display: flex;
     justify-content: space-between;
     gap: 16px;
     font-size: 16px;
 }
-#tariffs > div {
+#tariffs > div > div {
     border: 1px solid #aaa;
     border-radius: 8px;
     padding: 16px;
     min-width: 30%;
-    text-align: center;
     display: flex;
     flex-direction: column;
     gap: 8px
+}
+#tariffs h1 {
+    font-size: 20px;
+    margin-bottom: 16px;
 }
 #tariffs h2 {
     color: #0b0;
@@ -389,13 +396,16 @@ a {
 }
 #tgBotLink {
     display: none;
+}
+#tgBotHint {
+    display: none;
     cursor: unset;
     text-decoration: none;
-}
-#tgBotLink b {
-    cursor: pointer;
-    color: #2e5a7e;
-}
-#tgBotLink b:hover {
-    text-decoration: underline;
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 0 auto 30px;
+    width: max-content;
+    font-size: 16px;
+    background: #e1f6ff;
 }
