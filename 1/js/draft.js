@@ -2016,6 +2016,18 @@ const serviceTr = [
         rus: 'Чтобы использовать еще 4 попытки, присоединитесь к нашему ТГ боту и заберите там свой бонус',
         eng: 'To use 4 more attempts, join our TG bot and collect your bonus there',
         ge: 'Um 4 weitere Versuche zu nutzen, treten Sie unserem TG-Bot bei und sammeln Sie dort Ihren Bonus'
+    },
+    {
+        ua: 'Отримати мій бонус',
+        rus: 'Получите мой бонус',
+        eng: 'Get my bonus',
+        ge: 'Holen Sie sich meinen Bonus'
+    },
+    {
+        ua: 'Безлімітний доступ МАК',
+        rus: 'Безлимитный доступ МАК',
+        eng: 'Unlimited access MAC',
+        ge: 'Unbegrenzter MAC-Zugriff'
     }
 ]
 const tariffsTr = [
@@ -2055,6 +2067,12 @@ const tariffsTr = [
         eng: () => 'month',
         ge: count => count === 6 ? 'monate' : 'monat'
     },
+    {
+        ua: 'Тарифи безлімітного користування МАК',
+        rus: 'Тарифы безлимитного пользования МАК',
+        eng: 'Tariffs for unlimited use of MAK',
+        ge: 'Tarife für die unbegrenzte Nutzung von MAK'
+    }
 ]
 /**
  * jquery.baraja.js v1.0.0
@@ -2124,6 +2142,7 @@ jQuery.fn.reverse = [].reverse;
         reorderBtn = $('#reorder'),
         showResultBtn = $('#showResultBtn:not([disabled])'),
         tgBotLink = $('#tgBotLink'),
+        tgBotHint = $('#tgBotHint'),
         watchesLeft = WATCHES,
         reorderIteration = 0;
 
@@ -2135,7 +2154,8 @@ jQuery.fn.reverse = [].reverse;
     message.text(serviceTr[0][lang]);
     reorderBtn.text(serviceTr[4][lang]);
     showResultBtn.text(serviceTr[5][lang]);
-    tgBotLink.text(serviceTr[10][lang]);
+    tgBotHint.html(serviceTr[10][lang]);
+    tgBotLink.html(serviceTr[11][lang]);
 
     data.forEach((card, i) => {
         i && $barajaEl.append('<li data-i=' + i + '><img src="https://goncharukvalera.github.io/cards/2/images/' + i + '.jpg" alt="' + data[i][lang].name + '"/><h4>' + data[i][lang].name + '</h4></li>');
@@ -2282,7 +2302,8 @@ jQuery.fn.reverse = [].reverse;
                                 message.text('');
                                 showResultBtn.show();
                             } else {
-                                tgBotLink.show();
+                                tgBotLink.addClass('df');
+                                tgBotHint.show();
                             }
                         }
                     }
@@ -2788,8 +2809,10 @@ jQuery.fn.reverse = [].reverse;
         storageUserData = findLocalItems(/tilda_members_profile[0-9]+$/)?.val,
         userGroups = [],
         currentDateTime = new Date(),
-        $tariffs = $('#tariffs');
+        $tariffs = $('#tariffs'),
+        $tariffsTitle = $('#tariffs h1');
 
+    $tariffsTitle.text(tariffsTr[4][lang]);
     $tariffs.find('>div').each((i, tariff) => {
         const $tariff = $(tariff),
             $period = $tariff.find('p');
@@ -2802,21 +2825,44 @@ jQuery.fn.reverse = [].reverse;
     //submit contacts form
     $('body').on('click', '.uc-clientContactsFor button[type=submit]', e => {
         const $form = $(e.target).closest('form'),
-            email = $form.find('[type=email]').val();
+            email = $form.find('[type=email]').val(),
+            userName = $form.find('[name=Name]').val();
         debugger
         setTimeout(() => {
-            if ($form.find('.js-errorbox-all')) {
-                console.log('has error', email);
+            if ($form.find('.js-errorbox-all').is(':visible')) {
+                console.log('has error', email, userName);
             } else {
                 localStorage.setItem('email', email);
-                console.log('success', email);
+                localStorage.setItem('userName', userName);
+                console.log('success', email, userName);
                 setTimeout(() => {
                     $('.t-popup').fadeOut(300);
+                    showResult();
                 }, 500);
             }
         }, 500);
     });
     //submit contacts form
+
+    //bonus   ?bonus=tgBotBonus
+    const params = new URLSearchParams(location.search);
+    if (params.get('bonus') === 'tgBotBonus') {
+        const login = localStorage.getItem('email'),
+            name = localStorage.getItem('userName');
+        $.post(`${location.origin}/api/createmember/`,
+            {
+                activity: true,
+                groups: [794582],
+                login,
+                name,
+                password: '',
+                projectId: 178112,
+                setPassword: true
+            }, function () {
+                console.log('User received bonus');
+            });
+    }
+    //bonus
 
     storageUserData?.groups?.forEach(group => {
         if (group.is_confirmed && group.expired) {
@@ -2830,7 +2876,8 @@ jQuery.fn.reverse = [].reverse;
         $counter.show();
     }
     if (userGroups.includes('Bonus') || userGroups.includes('Personal') || userGroups.includes('Standard') || userGroups.includes('Business')) {
-        tgBotLink.hide();
+        tgBotLink.removeClass('df');
+        tgBotHint.hide();
     }
     const urlMocapi = 'https://64e680cb09e64530d1800ac4.mockapi.io';
     $.getJSON('https://api.ipify.org?format=json', data => {

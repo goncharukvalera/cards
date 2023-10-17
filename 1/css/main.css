@@ -5,11 +5,11 @@
     z-index: 1111
 }
 
-#message, .actions span, .codrops-top, #tariffs a {
+#message, .actions span, .codrops-top, #tariffs a, #tgBotLink {
     text-transform: uppercase
 }
 
-.actions span, .support-note span, #tariffs a {
+.actions span, .support-note span, #tariffs a, #tgBotLink {
     text-align: center;
     font-weight: 700
 }
@@ -200,7 +200,7 @@ a {
     padding: 50px 0 0
 }
 
-.actions span, #tariffs a {
+.actions span, #tariffs a, #tgBotLink {
     font-size: 1.25rem;
     display: inline-block;
     cursor: pointer;
@@ -213,17 +213,17 @@ a {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .2), 0 1px 1px rgba(255, 255, 255, .8)
 }
 
-.actions span:active, #tariffs a:active {
+.actions span:active, #tariffs a:active, #tgBotLink:active {
     background: #aaa;
     color: #fff;
     box-shadow: 0 1px 1px rgba(255, 255, 255, .5)
 }
 
-.actions span:hover, #tariffs a:hover {
+.actions span:hover, #tariffs a:hover, #tgBotLink:hover {
     background: #2e5a7e
 }
 
-.actions span[disabled], #tariffs a[disabled] {
+.actions span[disabled], #tariffs a[disabled], #tgBotLink[disabled] {
     background: #aaa;
     cursor: not-allowed;
 }
@@ -396,6 +396,8 @@ a {
 }
 #tgBotLink {
     display: none;
+    margin: 0 auto 16px;
+    width: max-content;
 }
 #tgBotHint {
     display: none;
@@ -404,7 +406,7 @@ a {
     border: 1px solid #aaa;
     border-radius: 8px;
     padding: 16px;
-    margin: 0 auto 30px;
+    margin: 0 auto 16px;
     width: max-content;
     font-size: 16px;
     background: #e1f6ff;
