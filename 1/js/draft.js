@@ -2809,7 +2809,7 @@ jQuery.fn.reverse = [].reverse;
         $tariffsTitle = $('#tariffs h1');
 
     $tariffsTitle.text(tariffsTr[4][lang]);
-    $tariffsBtn.text(tariffsTr[8][lang]);
+    $tariffsBtn.text(serviceTr[8][lang]);
     $tariffs.find('>div').each((i, tariff) => {
         const $tariff = $(tariff),
             $period = $tariff.find('p');

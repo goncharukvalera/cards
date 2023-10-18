@@ -402,7 +402,7 @@ a {
 .t-popup__container img.t-img {
     display: none;
 }
-#tgBotLink, #tariffsBtn {
+.container-vh #tgBotLink, .container-vh #tariffsBtn {
     display: none;
     margin: 0 auto 16px;
     width: max-content;
