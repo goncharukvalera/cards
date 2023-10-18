@@ -2296,9 +2296,11 @@ jQuery.fn.reverse = [].reverse;
                                 message.text('');
                                 showResultBtn.show();
                             } else {
-                                tgBotLink.addClass('df');
-                                tgBotHint.show();
-                                localStorage.setItem('url', location.href);
+                                if (localStorage.getItem('bonus') !== 'tgBotBonus') {
+                                    tgBotLink.addClass('df');
+                                    tgBotHint.show();
+                                    localStorage.setItem('url', location.href);
+                                }
                             }
                         }
                     }
@@ -2877,7 +2879,7 @@ jQuery.fn.reverse = [].reverse;
     if (userGroups.length === 1 && userGroups.includes('Bonus')) {
         $counter.show();
     }
-    if (userGroups.includes('Bonus') || userGroups.includes('Personal') || userGroups.includes('Standard') || userGroups.includes('Business')) {
+    if (localStorage.getItem('bonus') === 'tgBotBonus' || userGroups.includes('Personal') || userGroups.includes('Standard') || userGroups.includes('Business')) {
         tgBotLink.removeClass('df');
         tgBotHint.hide();
     }
@@ -2895,6 +2897,7 @@ jQuery.fn.reverse = [].reverse;
     const showResult = () => {
         showResultBtn.hide();
         let i = $('.flipped').data('i');
+        console.log('flipped', i);
         $('#result').html('<div><img src="https://goncharukvalera.github.io/cards/2/images/' + i + '.jpg" alt="' + data[i][lang].name + '"/><h4>' + data[i][lang]?.name + '</h4></div><span>' + serviceTr[3][lang] + ':</span><h4>' + data[i][lang]?.name + '</h4><p>' + data[i][lang]?.descr + '</p>').slideDown();
 
         if (rec?.id) {

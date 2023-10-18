@@ -407,7 +407,7 @@ a {
     margin: 0 auto 16px;
     width: max-content;
 }
-#tgBotHint {
+#tgBotHint, #counter {
     display: none;
     cursor: unset;
     text-decoration: none;
