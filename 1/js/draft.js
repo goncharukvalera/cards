@@ -2288,18 +2288,23 @@ jQuery.fn.reverse = [].reverse;
                     self._move2front($(this));
                     if (!isTop) {
                         $(this).addClass('flipped');
+                        const tgBotBonus = localStorage.getItem('bonus') !== 'tgBotBonus';
                         if (watchesLeft === WATCHES) {
                             message.text(serviceTr[9][lang]);
                             showResultBtn.show();
                         } else {
-                            if (userGroups.length === 1 && userGroups.includes('Bonus') || userGroups.includes('Personal') || userGroups.includes('Standard') || userGroups.includes('Business')) {
+                            if (watchesLeft && watchesLeft !== WATCHES && tgBotBonus || userGroups.includes('Personal') || userGroups.includes('Standard') || userGroups.includes('Business')) {
                                 message.text('');
+                                debugger
                                 showResultBtn.show();
                             } else {
-                                if (localStorage.getItem('bonus') !== 'tgBotBonus') {
+                                if (tgBotBonus && watchesLeft) {
                                     tgBotLink.addClass('df');
                                     tgBotHint.show();
                                     localStorage.setItem('url', location.href);
+                                }
+                                if (!watchesLeft) {
+
                                 }
                             }
                         }
@@ -2802,7 +2807,9 @@ jQuery.fn.reverse = [].reverse;
     let ip,
         rec = null,
         $counter = $('#counter'),
-        setCount = count => $counter.text(`${serviceTr[6][lang]} ${count}`),
+        setCount = count => {
+            count ? $counter.text(`${serviceTr[6][lang]} ${count}`) : $counter.text(serviceTr[7][lang]);
+        },
         storageUserData = findLocalItems(/tilda_members_profile[0-9]+$/)?.val,
         userGroups = [],
         currentDateTime = new Date(),
@@ -2849,8 +2856,9 @@ jQuery.fn.reverse = [].reverse;
         const login = localStorage.getItem('email'),
             name = localStorage.getItem('userName'),
             bonus = localStorage.getItem('bonus');
-        if (bonus === 'tgBotBonus' && document.referrer.includes('tgBotBonus') && name && login) {
-            showResultBtn.show();
+        if (bonus === 'tgBotBonus' && document.referrer.includes('tgBotBonus') && name && login &&
+            !userGroups.includes('Personal') && !userGroups.includes('Standard') && !userGroups.includes('Business')
+            /*|| location.hostname === 'localhost'*/) {
             $counter.show();
             // $.post(`https://members.tilda.cc/api/createmember/`, // unauthorized error, need cookies
             //     {
@@ -2876,9 +2884,6 @@ jQuery.fn.reverse = [].reverse;
             }
         }
     });
-    if (userGroups.length === 1 && userGroups.includes('Bonus')) {
-        $counter.show();
-    }
     if (localStorage.getItem('bonus') === 'tgBotBonus' || userGroups.includes('Personal') || userGroups.includes('Standard') || userGroups.includes('Business')) {
         tgBotLink.removeClass('df');
         tgBotHint.hide();
@@ -2889,9 +2894,12 @@ jQuery.fn.reverse = [].reverse;
         $.getJSON(`${urlMocapi}/ips`, data => {
             rec = data.find(rec => rec.ip === ip);
             if (rec?.id) {
-                watchesLeft = rec.watchesLeft;
+                watchesLeft = +rec.watchesLeft;
             }
             setCount(watchesLeft);
+            if (!watchesLeft && !userGroups.includes('Personal') && !userGroups.includes('Standard') && !userGroups.includes('Business')) {
+                $counter.show();
+            }
         });
     });
     const showResult = () => {
@@ -2923,13 +2931,17 @@ jQuery.fn.reverse = [].reverse;
         } else {
             watchesLeft--;
             if (!watchesLeft) {
+                debugger
                 $counter.text(serviceTr[7][lang]);
-                $tariffsBtn.show();
                 $(this).attr('disabled', 'disabled');
-            } else {
-                showResult();
             }
+            showResult();
         }
+    });
+
+    $tariffsBtn.on('click', function () {
+        $tariffsBtn.removeClass('df');
+        $tariffs.slideDown(300);
     });
 
     // came from bot
