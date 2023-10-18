@@ -2304,6 +2304,7 @@ jQuery.fn.reverse = [].reverse;
                             } else {
                                 tgBotLink.addClass('df');
                                 tgBotHint.show();
+                                localStorage.setItem('url', location.href);
                             }
                         }
                     }
@@ -2845,22 +2846,24 @@ jQuery.fn.reverse = [].reverse;
     //submit contacts form
 
     //bonus   ?bonus=tgBotBonus
-    const params = new URLSearchParams(location.search);
-    if (params.get('bonus') === 'tgBotBonus') {
+    {
         const login = localStorage.getItem('email'),
-            name = localStorage.getItem('userName');
-        $.post(`${location.origin}/api/createmember/`,
-            {
-                activity: true,
-                groups: [794582],
-                login,
-                name,
-                password: '',
-                projectId: 178112,
-                setPassword: true
-            }, function () {
-                console.log('User received bonus');
-            });
+            name = localStorage.getItem('userName'),
+            bonus = localStorage.getItem('bonus');
+        if (bonus === 'tgBotBonus' && name && login) {
+            $.post(`${location.origin}/api/createmember/`,
+                {
+                    activity: true,
+                    groups: [794582],
+                    login,
+                    name,
+                    password: '',
+                    projectId: 178112,
+                    setPassword: true
+                }, function () {
+                    console.log('User received bonus');
+                });
+        }
     }
     //bonus
 
@@ -2923,4 +2926,13 @@ jQuery.fn.reverse = [].reverse;
             }
         }
     });
+
+    // came from bot
+    // const params = new URLSearchParams(location.search);
+    // const redirectUrl = localStorage.getItem('url')
+    // if (params.get('bonus') === 'tgBotBonus' && redirectUrl) {
+    //     localStorage.setItem('bonus', 'tgBotBonus');
+    //     location.href = redirectUrl
+    // }
+    // came from bot
 })(jQuery, window);
