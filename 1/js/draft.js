@@ -1994,16 +1994,16 @@ const serviceTr = [
         ge: 'Freie Aufrufe übrig:'
     },
     {
-        ua: 'Ви використали безкоштовні перегляди. Щоб отримати ще перегляди, будь ласка',
-        rus: 'Вы использовали бесплатные просмотры. Чтобы получить ещё просмотры, пожалуйста',
-        eng: 'You have used the free views. To receive more views, please',
-        ge: 'Sie haben die kostenlosen Ansichten genutzt. Um weitere Aufrufe zu erhalten, Sie sich bitte'
+        ua: 'Ви використали безкоштовні перегляди. Щоб отримати ще перегляди, будь ласка, оберіть варіант безлімітного доступу МАК',
+        rus: 'Вы использовали бесплатные просмотры. Чтобы получить еще просмотры, выберите вариант безлимитного доступа МАК',
+        eng: 'You have used the free views. To get more views, please choose the unlimited MAC option',
+        ge: 'Sie haben die kostenlosen Ansichten genutzt. Um mehr Aufrufe zu erhalten, wählen Sie bitte die unbegrenzte MAC-Option'
     },
     {
-        ua: 'Зареєструйтесь',
-        rus: 'Зарегистрируйтесь',
-        eng: 'Register',
-        ge: 'Registrieren'
+        ua: 'Безлімітний доступ МАК',
+        rus: 'Безлимитный доступ МАК',
+        eng: 'Unlimited access MAC',
+        ge: 'Unbegrenzter MAC-Zugriff'
     },
     {
         ua: 'Щоб подивитися результат заповніть форму',
@@ -2022,12 +2022,6 @@ const serviceTr = [
         rus: 'Получите мой бонус',
         eng: 'Get my bonus',
         ge: 'Holen Sie sich meinen Bonus'
-    },
-    {
-        ua: 'Безлімітний доступ МАК',
-        rus: 'Безлимитный доступ МАК',
-        eng: 'Unlimited access MAC',
-        ge: 'Unbegrenzter MAC-Zugriff'
     }
 ]
 const tariffsTr = [
@@ -2811,9 +2805,11 @@ jQuery.fn.reverse = [].reverse;
         userGroups = [],
         currentDateTime = new Date(),
         $tariffs = $('#tariffs'),
+        $tariffsBtn = $('#tariffsBtn'),
         $tariffsTitle = $('#tariffs h1');
 
     $tariffsTitle.text(tariffsTr[4][lang]);
+    $tariffsBtn.text(tariffsTr[8][lang]);
     $tariffs.find('>div').each((i, tariff) => {
         const $tariff = $(tariff),
             $period = $tariff.find('p');
@@ -2838,6 +2834,7 @@ jQuery.fn.reverse = [].reverse;
                 console.log('success', email, userName);
                 setTimeout(() => {
                     $('.t-popup').fadeOut(300);
+                    watchesLeft--;
                     showResult();
                 }, 500);
             }
@@ -2851,7 +2848,7 @@ jQuery.fn.reverse = [].reverse;
             name = localStorage.getItem('userName'),
             bonus = localStorage.getItem('bonus');
         if (bonus === 'tgBotBonus' && name && login) {
-            $.post(`${location.origin}/api/createmember/`,
+            $.post(`https://members.tilda.cc/api/createmember/`,
                 {
                     activity: true,
                     groups: [794582],
@@ -2904,6 +2901,7 @@ jQuery.fn.reverse = [].reverse;
                 type: `PUT`,
                 data: {watchesLeft, createdAt: +Date.now()},
             }).done(function () {
+                console.log('mocapiPUT', watchesLeft);
                 setCount(watchesLeft);
             });
         } else {
@@ -2919,7 +2917,8 @@ jQuery.fn.reverse = [].reverse;
         } else {
             watchesLeft--;
             if (!watchesLeft) {
-                $counter.html(`${serviceTr[7][lang]} <a href="#">${serviceTr[8][lang]}</a>`);
+                $counter.text(serviceTr[7][lang]);
+                $tariffsBtn.show();
                 $(this).attr('disabled', 'disabled');
             } else {
                 showResult();
