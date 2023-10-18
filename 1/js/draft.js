@@ -2847,19 +2847,21 @@ jQuery.fn.reverse = [].reverse;
         const login = localStorage.getItem('email'),
             name = localStorage.getItem('userName'),
             bonus = localStorage.getItem('bonus');
-        if (bonus === 'tgBotBonus' && name && login) {
-            $.post(`https://members.tilda.cc/api/createmember/`,
-                {
-                    activity: true,
-                    groups: [794582],
-                    login,
-                    name,
-                    password: '',
-                    projectId: 178112,
-                    setPassword: true
-                }, function () {
-                    console.log('User received bonus');
-                });
+        if (bonus === 'tgBotBonus' && document.referrer.includes('tgBotBonus') && name && login) {
+            showResultBtn.show();
+            $counter.show();
+            // $.post(`https://members.tilda.cc/api/createmember/`, // unauthorized error, need cookies
+            //     {
+            //         activity: true,
+            //         groups: [794582],
+            //         login,
+            //         name,
+            //         password: '',
+            //         projectId: 178112,
+            //         setPassword: true
+            //     }, function () {
+            //         console.log('User received bonus');
+            //     });
         }
     }
     //bonus
@@ -2914,6 +2916,7 @@ jQuery.fn.reverse = [].reverse;
         // $(this).removeAttr('disabled');
         if (watchesLeft === WATCHES && !localStorage.getItem('email')) {
             $('.t-popup').fadeIn(300);
+            showResultBtn.hide();
         } else {
             watchesLeft--;
             if (!watchesLeft) {
