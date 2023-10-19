@@ -2288,23 +2288,23 @@ jQuery.fn.reverse = [].reverse;
                     self._move2front($(this));
                     if (!isTop) {
                         $(this).addClass('flipped');
-                        const tgBotBonus = localStorage.getItem('bonus') !== 'tgBotBonus';
+                        const tgBotBonus = localStorage.getItem('bonus') === 'tgBotBonus';
                         if (watchesLeft === WATCHES) {
                             message.text(serviceTr[9][lang]);
                             showResultBtn.show();
                         } else {
-                            if (watchesLeft && watchesLeft !== WATCHES && tgBotBonus || userGroups.includes('Personal') || userGroups.includes('Standard') || userGroups.includes('Business')) {
+                            if (watchesLeft && (watchesLeft !== WATCHES) && tgBotBonus || userGroups.includes('Personal') || userGroups.includes('Standard') || userGroups.includes('Business')) {
                                 message.text('');
                                 debugger
                                 showResultBtn.show();
                             } else {
-                                if (tgBotBonus && watchesLeft) {
+                                if (!tgBotBonus && watchesLeft) {
                                     tgBotLink.addClass('df');
                                     tgBotHint.show();
                                     localStorage.setItem('url', location.href);
                                 }
                                 if (!watchesLeft) {
-
+                                    $counter.text(serviceTr[7][lang]);
                                 }
                             }
                         }
@@ -2897,7 +2897,7 @@ jQuery.fn.reverse = [].reverse;
                 watchesLeft = +rec.watchesLeft;
             }
             setCount(watchesLeft);
-            if (!watchesLeft && !userGroups.includes('Personal') && !userGroups.includes('Standard') && !userGroups.includes('Business')) {
+            if (watchesLeft !== WATCHES && !userGroups.includes('Personal') && !userGroups.includes('Standard') && !userGroups.includes('Business')) {
                 $counter.show();
             }
         });
@@ -2905,7 +2905,6 @@ jQuery.fn.reverse = [].reverse;
     const showResult = () => {
         showResultBtn.hide();
         let i = $('.flipped').data('i');
-        console.log('flipped', i);
         $('#result').html('<div><img src="https://goncharukvalera.github.io/cards/2/images/' + i + '.jpg" alt="' + data[i][lang].name + '"/><h4>' + data[i][lang]?.name + '</h4></div><span>' + serviceTr[3][lang] + ':</span><h4>' + data[i][lang]?.name + '</h4><p>' + data[i][lang]?.descr + '</p>').slideDown();
 
         if (rec?.id) {
@@ -2914,7 +2913,6 @@ jQuery.fn.reverse = [].reverse;
                 type: `PUT`,
                 data: {watchesLeft, createdAt: +Date.now()},
             }).done(function () {
-                console.log('mocapiPUT', watchesLeft);
                 setCount(watchesLeft);
             });
         } else {
@@ -2930,7 +2928,7 @@ jQuery.fn.reverse = [].reverse;
             showResultBtn.hide();
         } else {
             watchesLeft--;
-            if (!watchesLeft) {
+            if (!watchesLeft && !userGroups.includes('Personal') && !userGroups.includes('Standard') && !userGroups.includes('Business')) {
                 debugger
                 $counter.text(serviceTr[7][lang]);
                 $(this).attr('disabled', 'disabled');
