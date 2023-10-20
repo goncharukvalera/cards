@@ -1972,7 +1972,7 @@ const serviceTr = [
     {
         ua: `Твоя карта`,
         rus: `Твоя карта`,
-        eng: `Your card of`,
+        eng: `Your card`,
         ge: `Deine Karte`
     },
     {
@@ -1985,19 +1985,19 @@ const serviceTr = [
         ua: `Подивитися результат`,
         rus: `Посмотреть результат`,
         eng: `View result`,
-        ge: `Ergebnis ansehen`
+        ge: `Sehen das Ergebnis`
     },
     {
         ua: 'Залишилось безкоштовних переглядів:',
-        rus: 'Осталось бесплатных просмотров',
-        eng: 'Free watches left:',
-        ge: 'Freie Aufrufe übrig:'
+        rus: 'Осталось бесплатных просмотров:',
+        eng: 'Free views left:',
+        ge: 'Freie Zeiten übrig:'
     },
     {
         ua: 'Ви використали безкоштовні перегляди. Щоб отримати ще перегляди, будь ласка, оберіть варіант безлімітного доступу МАК',
         rus: 'Вы использовали бесплатные просмотры. Чтобы получить еще просмотры, выберите вариант безлимитного доступа МАК',
-        eng: 'You have used the free views. To get more views, please choose the unlimited MAC option',
-        ge: 'Sie haben die kostenlosen Ansichten genutzt. Um mehr Aufrufe zu erhalten, wählen Sie bitte die unbegrenzte MAC-Option'
+        eng: 'You have used free views. To get more views, please select the unlimited MAC option',
+        ge: 'Sie haben die kostenlosen Ansichten aufgebraucht. Um mehr Aufrufe zu erhalten, wählen Sie bitte die Option unbegrenzter MAK-Zugriff'
     },
     {
         ua: 'Безлімітний доступ МАК',
@@ -2006,7 +2006,7 @@ const serviceTr = [
         ge: 'Unbegrenzter MAC-Zugriff'
     },
     {
-        ua: 'Щоб подивитися результат заповніть форму',
+        ua: 'Щоб подивитися результат, заповніть форму',
         rus: 'Чтобы посмотреть результат, заполните форму',
         eng: 'To see the result, fill out the form',
         ge: 'Um das Ergebnis zu sehen, füllen Sie das Formular aus'
@@ -2019,9 +2019,9 @@ const serviceTr = [
     },
     {
         ua: 'Отримати мій бонус',
-        rus: 'Получите мой бонус',
+        rus: 'Получить мой бонус',
         eng: 'Get my bonus',
-        ge: 'Holen Sie sich meinen Bonus'
+        ge: 'Holen Sie sich Ihren Bonus'
     }
 ]
 const tariffsTr = [
@@ -2041,7 +2041,7 @@ const tariffsTr = [
         ua: 'подарунок',
         rus: 'подарок',
         eng: 'gift',
-        ge: 'geschenk'
+        ge: 'Geschenk'
     },
     {
         ua: count => {
@@ -2064,8 +2064,14 @@ const tariffsTr = [
     {
         ua: 'Тарифи безлімітного користування МАК',
         rus: 'Тарифы безлимитного пользования МАК',
-        eng: 'Tariffs for unlimited use of MAK',
+        eng: 'Tariffs for unlimited use of MAC',
         ge: 'Tarife für die unbegrenzte Nutzung von MAK'
+    },
+    {
+        ua: 'Пів року',
+        rus: 'Пол года',
+        eng: 'Half a year',
+        ge: 'Ein halbes Jahr'
     }
 ]
 /**
@@ -2810,7 +2816,7 @@ jQuery.fn.reverse = [].reverse;
         setCount = count => {
             count ? $counter.text(`${serviceTr[6][lang]} ${count}`) : $counter.text(serviceTr[7][lang]);
         },
-        storageUserData = findLocalItems(/tilda_members_profile[0-9]+$/)?.val,
+        storageUserData = findLocalItems(/tilda_members_profile[0-9]+$/)[0]?.val,
         userGroups = [],
         currentDateTime = new Date(),
         $tariffs = $('#tariffs'),
@@ -2819,10 +2825,15 @@ jQuery.fn.reverse = [].reverse;
 
     $tariffsTitle.text(tariffsTr[4][lang]);
     $tariffsBtn.text(serviceTr[8][lang]);
-    $tariffs.find('>div').each((i, tariff) => {
+    $tariffs.find('>div>div').each((i, tariff) => {
         const $tariff = $(tariff),
-            $period = $tariff.find('p');
-        $period.find('span').text(tariffsTr[3][lang](+$period.text()));
+            $period = $tariff.find('p'),
+            period = +$period.text();
+        if (period === 6) {
+            $period.text(tariffsTr[5][lang]);
+        } else {
+            $period.find('span').text(tariffsTr[3][lang](period));
+        }
         $tariff.find('a').text(tariffsTr[1][lang]);
         $tariff.find('div span').text(tariffsTr[0][lang]);
         i === 2 && $tariff.find('b').text('+ ' + tariffsTr[2][lang]);
@@ -2836,11 +2847,11 @@ jQuery.fn.reverse = [].reverse;
         debugger
         setTimeout(() => {
             if ($form.find('.js-errorbox-all').is(':visible')) {
-                console.log('has error', email, userName);
+                // console.log('has error', email, userName);
             } else {
                 localStorage.setItem('email', email);
                 localStorage.setItem('userName', userName);
-                console.log('success', email, userName);
+                // console.log('success', email, userName);
                 setTimeout(() => {
                     $('.t-popup').fadeOut(300);
                     watchesLeft--;
@@ -2884,6 +2895,7 @@ jQuery.fn.reverse = [].reverse;
             }
         }
     });
+
     if (localStorage.getItem('bonus') === 'tgBotBonus' || userGroups.includes('Personal') || userGroups.includes('Standard') || userGroups.includes('Business')) {
         tgBotLink.removeClass('df');
         tgBotHint.hide();
@@ -2929,7 +2941,6 @@ jQuery.fn.reverse = [].reverse;
         } else {
             watchesLeft--;
             if (!watchesLeft && !userGroups.includes('Personal') && !userGroups.includes('Standard') && !userGroups.includes('Business')) {
-                debugger
                 $counter.text(serviceTr[7][lang]);
                 $(this).attr('disabled', 'disabled');
             }
@@ -2950,4 +2961,14 @@ jQuery.fn.reverse = [].reverse;
     //     location.href = redirectUrl
     // }
     // came from bot
+
+    // fix for reload after back in browser
+    window.addEventListener('pageshow', function (e) {
+        let historyTraversal = e.persisted ||
+            (typeof window.performance != 'undefined' && window.performance.navigation.type === 2);
+        if (historyTraversal) {
+            window.location.reload();
+        }
+    });
+    // fix for reload after back in browser
 })(jQuery, window);
