@@ -2828,13 +2828,15 @@ jQuery.fn.reverse = [].reverse;
     $tariffs.find('>div>div').each((i, tariff) => {
         const $tariff = $(tariff),
             $period = $tariff.find('p'),
-            period = +$period.text();
+            period = +$period.text(),
+            $btn = $tariff.find('a');
         if (period === 6) {
             $period.text(tariffsTr[5][lang]);
         } else {
             $period.find('span').text(tariffsTr[3][lang](period));
         }
-        $tariff.find('a').text(tariffsTr[1][lang]);
+        $btn.text(tariffsTr[1][lang]);
+        $btn.attr('href', $btn.attr('href') + lang);
         $tariff.find('div span').text(tariffsTr[0][lang]);
         i === 2 && $tariff.find('b').text('+ ' + tariffsTr[2][lang]);
     });
@@ -2853,7 +2855,7 @@ jQuery.fn.reverse = [].reverse;
                 localStorage.setItem('userName', userName);
                 // console.log('success', email, userName);
                 setTimeout(() => {
-                    $('.t-popup').fadeOut(300);
+                    $('[class*=clientContactsFor] .t-popup').fadeOut(300);
                     watchesLeft--;
                     showResult();
                 }, 500);
@@ -2936,7 +2938,7 @@ jQuery.fn.reverse = [].reverse;
     showResultBtn.on('click', function () {
         // $(this).removeAttr('disabled');
         if (watchesLeft === WATCHES && !localStorage.getItem('email')) {
-            $('.t-popup').fadeIn(300);
+            $('[class*=clientContactsFor] .t-popup').fadeIn(300);
             showResultBtn.hide();
         } else {
             watchesLeft--;
@@ -2971,4 +2973,33 @@ jQuery.fn.reverse = [].reverse;
         }
     });
     // fix for reload after back in browser
+
+    // reset flow
+    $('#resetFlowBtn').on('click', function () {
+        const urlMocapi = 'https://64e680cb09e64530d1800ac4.mockapi.io';
+        $.getJSON('https://api.ipify.org?format=json', data => {
+            const ip = data.ip;
+            $.getJSON(`${urlMocapi}/ips`, data => {
+                data.forEach(rec => {
+                    if (rec.ip === ip) {
+                        fetch(`https://64e680cb09e64530d1800ac4.mockapi.io/ips/${rec.id}`, {
+                            method: 'DELETE',
+                        }).then(res => {
+                            if (res.ok) {
+                                localStorage.clear();
+                                return res.json();
+                            }
+                            console.log('Error when try to delete IP record');
+                        }).then(task => {
+                            // Do something with deleted task
+                        }).catch(error => {
+                            console.log('Unhandled error when try to delete IP record');
+                        });
+                    }
+                });
+
+            });
+        });
+    });
+    // reset flow
 })(jQuery, window);
