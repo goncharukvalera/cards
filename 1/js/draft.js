@@ -2299,7 +2299,7 @@ jQuery.fn.reverse = [].reverse;
                             message.text(serviceTr[9][lang]);
                             showResultBtn.show();
                         } else {
-                            if (watchesLeft && (watchesLeft !== WATCHES) && tgBotBonus || userGroups.includes('Personal') || userGroups.includes('Standard') || userGroups.includes('Business')) {
+                            if (watchesLeft && (watchesLeft !== WATCHES) && tgBotBonus || userGroups.some(element => ['Personal', 'Standard', 'Business', 'Personal+', 'Standard+', 'Business+'].includes(element))) {
                                 message.text('');
                                 debugger
                                 showResultBtn.show();
@@ -2870,7 +2870,7 @@ jQuery.fn.reverse = [].reverse;
             name = localStorage.getItem('userName'),
             bonus = localStorage.getItem('bonus');
         if (bonus === 'tgBotBonus' && document.referrer.includes('tgBotBonus') && name && login &&
-            !userGroups.includes('Personal') && !userGroups.includes('Standard') && !userGroups.includes('Business')
+            !userGroups.some(element => ['Personal', 'Standard', 'Business', 'Personal+', 'Standard+', 'Business+'].includes(element))
             /*|| location.hostname === 'localhost'*/) {
             $counter.show();
             // $.post(`https://members.tilda.cc/api/createmember/`, // unauthorized error, need cookies
@@ -2898,7 +2898,7 @@ jQuery.fn.reverse = [].reverse;
         }
     });
 
-    if (localStorage.getItem('bonus') === 'tgBotBonus' || userGroups.includes('Personal') || userGroups.includes('Standard') || userGroups.includes('Business')) {
+    if (localStorage.getItem('bonus') === 'tgBotBonus' || userGroups.some(element => ['Personal', 'Standard', 'Business', 'Personal+', 'Standard+', 'Business+'].includes(element))) {
         tgBotLink.removeClass('df');
         tgBotHint.hide();
     }
@@ -2911,7 +2911,7 @@ jQuery.fn.reverse = [].reverse;
                 watchesLeft = +rec.watchesLeft;
             }
             setCount(watchesLeft);
-            if (watchesLeft !== WATCHES && !userGroups.includes('Personal') && !userGroups.includes('Standard') && !userGroups.includes('Business')) {
+            if (watchesLeft !== WATCHES && !userGroups.some(element => ['Personal', 'Standard', 'Business', 'Personal+', 'Standard+', 'Business+'].includes(element))) {
                 $counter.show();
             }
         });
@@ -2942,7 +2942,7 @@ jQuery.fn.reverse = [].reverse;
             showResultBtn.hide();
         } else {
             watchesLeft--;
-            if (!watchesLeft && !userGroups.includes('Personal') && !userGroups.includes('Standard') && !userGroups.includes('Business')) {
+            if (!watchesLeft && !userGroups.some(element => ['Personal', 'Standard', 'Business', 'Personal+', 'Standard+', 'Business+'].includes(element))) {
                 $counter.text(serviceTr[7][lang]);
                 $(this).attr('disabled', 'disabled');
             }
@@ -2951,8 +2951,14 @@ jQuery.fn.reverse = [].reverse;
     });
 
     $tariffsBtn.on('click', function () {
-        $tariffsBtn.removeClass('df');
-        $tariffs.slideDown(300);
+        debugger
+        const redirectUrl = $tariffsBtn.data('redirect');
+        if (!redirectUrl && $tariffs) {
+            $tariffsBtn.removeClass('df');
+            $tariffs.slideDown(300);
+        } else {
+            window.location.href = redirectUrl;
+        }
     });
 
     // came from bot
