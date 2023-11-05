@@ -2909,15 +2909,15 @@ jQuery.fn.reverse = [].reverse;
         let orderId = form.tildaOrderId;
 
         /* все поля заявки в */
-        let obj = {};
-        let inputs = form.elements;
-        Array.prototype.forEach.call(inputs, function (input) {
-            if (input.type === 'radio') {
-                if (input.checked) obj[input.name] = input.value;
-            } else {
-                obj[input.name] = input.value;
-            }
-        });
+        // let obj = {};
+        // let inputs = form.elements;
+        // Array.prototype.forEach.call(inputs, function (input) {
+        //     if (input.type === 'radio') {
+        //         if (input.checked) obj[input.name] = input.value;
+        //     } else {
+        //         obj[input.name] = input.value;
+        //     }
+        // });
 
         setTimeout(() => {
             const $block = $($form?.closest('[class*=uc-tariff]')),
