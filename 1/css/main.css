@@ -5,11 +5,11 @@
     z-index: 1111
 }
 
-#message, .actions span, .codrops-top, #tariffs a, #tgBotLink, #tariffsBtn {
+#message, .actions span, .codrops-top, #tariffs a, .vh-popup a, #tgBotLink, #tariffsBtn {
     text-transform: uppercase
 }
 
-.actions span, .support-note span, #tariffs a, #tgBotLink, #tariffsBtn {
+.actions span, .support-note span, #tariffs a, .vh-popup a, #tgBotLink, #tariffsBtn {
     text-align: center;
     font-weight: 700
 }
@@ -200,7 +200,7 @@ a {
     padding: 50px 0 20px
 }
 
-.actions span, #tariffs a,
+.actions span, #tariffs a, .vh-popup a,
 .container-vh #tariffsBtn,
 .container-vh #tgBotLink {
     font-size: 1.25rem;
@@ -215,7 +215,7 @@ a {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .2), 0 1px 1px rgba(255, 255, 255, .8)
 }
 
-.actions span:active, #tariffs a:active,
+.actions span:active, #tariffs a:active, .vh-popup a:active,
 .container-vh #tariffsBtn:active,
 .container-vh #tgBotLink:active {
     background: #aaa;
@@ -223,7 +223,7 @@ a {
     box-shadow: 0 1px 1px rgba(255, 255, 255, .5)
 }
 
-.actions span:hover, #tariffs a:hover,
+.actions span:hover, #tariffs a:hover, .vh-popup a:hover,
 .container-vh #tariffsBtn:hover,
 .container-vh #tgBotLink:hover {
     background: #2e5a7e
@@ -415,4 +415,50 @@ a {
     text-align: center;
     font-size: 16px;
     background: #e1f6ff;
+}
+.vh-popup {
+    position: fixed;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,.5);
+}
+.vh-popup-content {
+    width: 400px;
+    height: max-content;
+    border: 1px solid #555;
+    border-radius: 10px;
+    position: relative;
+    padding: 16px;
+    text-align: center;
+}
+.vh-popup-content a {
+    display: none;
+}
+.vh-popup-close {
+    position: absolute;
+    right: 18px;
+    top: 10px;
+    cursor: pointer;
+}
+.vh-popup-close:before, .vh-popup-close:after {
+    display: block;
+    content: '';
+}
+.vh-popup-close:before {
+    width: 1px;
+    height: 16px;
+    background: #555;
+    transform: rotate(45deg);
+}
+.vh-popup-close:after {
+    width: 16px;
+    height: 1px;
+    background: #555;
+    transform: rotate(45deg);
+    margin: -8px;
 }

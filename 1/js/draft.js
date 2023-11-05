@@ -2072,6 +2072,18 @@ const tariffsTr = [
         rus: 'Пол года',
         eng: 'Half a year',
         ge: 'Ein halbes Jahr'
+    },
+    {
+        ua: 'Оплатити пакет доступу',
+        rus: 'Оплатить пакет доступа',
+        eng: 'Pay for access package',
+        ge: 'Bezahlen Sie für das Zugangspaket'
+    },
+    {
+        ua: 'Для продовження виберіть варіант оплати',
+        rus: 'Для продолжения выберите вариант оплаты',
+        eng: 'To continue, select a payment option',
+        ge: 'Um fortzufahren, wählen Sie eine Zahlungsoption aus'
     }
 ]
 /**
@@ -2841,6 +2853,13 @@ jQuery.fn.reverse = [].reverse;
         i === 2 && $tariff.find('b').text('+ ' + tariffsTr[2][lang]);
     });
 
+    //popup
+    const $popup = $('.vh-popup');
+    $popup.find('b').on('click', () => {
+        $popup.removeClass('df');
+    });
+    //popup
+
     //submit contacts form
     $('body').on('click', '.uc-clientContactsFor button[type=submit]', e => {
         const $form = $(e.target).closest('form'),
@@ -2863,6 +2882,76 @@ jQuery.fn.reverse = [].reverse;
         }, 500);
     });
     //submit contacts form
+
+    //submit tariffs forms
+    // $('body').on('click', '[class*=uc-tariff] button[type=submit]', e => {
+    //     const $form = $(e.target).closest('form');
+    //     debugger
+    //     setTimeout(() => {
+    //         if ($form.find('.js-errorbox-all').is(':visible')) {
+    //             // console.log('has error', email, userName);
+    //         } else {
+    //             setTimeout(() => {
+    //                 debugger
+    //                 $('[class*=uc-tariff] .t-popup').fadeOut(300);
+    //                 localStorage.setItem('referrer', location.href);
+    //                 setTimeout(() => $('a.' + tariff).click(), 3000);
+    //             }, 500);
+    //         }
+    //     }, 500);
+    // });
+    function mySuccessFunction($form) {
+        if (!$form) return;
+        const form = $form[0];
+
+        /* номер заявки (Lead ID) */
+        let leadId = form.tildaTranId;
+        let orderId = form.tildaOrderId;
+
+        /* все поля заявки в */
+        let obj = {};
+        let inputs = form.elements;
+        Array.prototype.forEach.call(inputs, function (input) {
+            if (input.type === 'radio') {
+                if (input.checked) obj[input.name] = input.value;
+            } else {
+                obj[input.name] = input.value;
+            }
+        });
+
+        setTimeout(() => {
+            const $block = $($form?.closest('[class*=uc-tariff]')),
+                tariff = $block?.length && $block.attr('class')?.replace(/^.*uc-tariff/, '') || '';
+            $('[class*=uc-tariff] .t-popup').fadeOut(300);
+            localStorage.setItem('referrer', location.href);
+            $popup.find('.vh-popup-content').prepend(`<p>${tariffsTr[7][lang]}</p>`);
+            $popup.find(`a.tariff${tariff}`).text(`${tariffsTr[6][lang]} ${tariff}`).show();
+            setTimeout(() => $popup.addClass('df'), 500);
+        }, 500);
+        /*
+        для обращения к значению поля используйте:
+        obj["Name"]
+        obj["Phone"]
+        obj["Email"]
+        и так далее...
+        */
+    }
+
+    if (document.readyState !== 'loading') {
+        us_sendFormAfterSuccess();
+    } else {
+        document.addEventListener('DOMContentLoaded', us_sendFormAfterSuccess);
+    }
+
+    function us_sendFormAfterSuccess() {
+        let forms = document.querySelectorAll('.js-form-proccess');
+        Array.prototype.forEach.call(forms, function (form) {
+            form.addEventListener('tildaform:aftersuccess', function () {
+                mySuccessFunction(form);
+            });
+        });
+    }
+    //submit tariffs forms
 
     //bonus   ?bonus=tgBotBonus
     {
