@@ -2919,15 +2919,17 @@ jQuery.fn.reverse = [].reverse;
         //     }
         // });
 
-        setTimeout(() => {
-            const $block = $($form?.closest('[class*=uc-tariff]')),
-                tariff = $block?.length && $block.attr('class')?.replace(/^.*uc-tariff/, '') || '';
-            $('[class*=uc-tariff] .t-popup').fadeOut(300);
-            localStorage.setItem('referrer', location.href);
-            $popup.find('.vh-popup-content').prepend(`<p>${tariffsTr[7][lang]}</p>`);
-            $popup.find(`a.tariff${tariff}`).text(`${tariffsTr[6][lang]} ${tariff}`).show();
-            setTimeout(() => $popup.addClass('df'), 500);
-        }, 500);
+        if (window?.payment !== 'manualPayment') {
+            setTimeout(() => {
+                const $block = $($form?.closest('[class*=uc-tariff]')),
+                    tariff = $block?.length && $block.attr('class')?.replace(/^.*uc-tariff/, '') || '';
+                $('[class*=uc-tariff] .t-popup').fadeOut(300);
+                localStorage.setItem('referrer', location.href);
+                $popup.find('.vh-popup-content').prepend(`<p>${tariffsTr[7][lang]}</p>`);
+                $popup.find(`a.tariff${tariff}`).text(`${tariffsTr[6][lang]} ${tariff}`).show();
+                setTimeout(() => $popup.addClass('df'), 500);
+            }, 500);
+        }
         /*
         для обращения к значению поля используйте:
         obj["Name"]
