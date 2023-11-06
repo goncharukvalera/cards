@@ -2080,8 +2080,8 @@ const tariffsTr = [
         ge: 'Bezahlen Sie für das Zugangspaket'
     },
     {
-        ua: 'Для продовження виберіть варіант оплати',
-        rus: 'Для продолжения выберите вариант оплаты',
+        ua: 'Щоб продовжити, виберіть варіант оплати',
+        rus: 'Чтобы продолжить, выберите вариант оплаты',
         eng: 'To continue, select a payment option',
         ge: 'Um fortzufahren, wählen Sie eine Zahlungsoption aus'
     }
