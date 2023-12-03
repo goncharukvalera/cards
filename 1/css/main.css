@@ -126,6 +126,11 @@ a {
     margin: 0 auto;
     padding: 0 30px
 }
+@media screen and (max-width: 920px){
+    .container-vh > header, .main-vh {
+        width: 100%;
+    }
+}
 
 .container-vh > header {
     padding: 30px
@@ -214,6 +219,13 @@ a {
     text-shadow: 0 1px 1px rgba(0, 0, 0, .3);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .2), 0 1px 1px rgba(255, 255, 255, .8)
 }
+@media screen and (max-width: 500px){
+    .actions span {
+        display: block;
+        width: max-content;
+        margin: 0 auto 16px;
+    }
+}
 
 .actions span:active, #tariffs a:active, .vh-popup a:active,
 .container-vh #tariffsBtn:active,
@@ -245,9 +257,23 @@ a {
 
 .baraja-demo {
     margin: 30px auto;
-    color: #aaa
+    color: #aaa;
+    transition: 500ms linear;
 }
-
+@media screen and (max-width: 1024px){
+    .baraja-demo {
+        transform: scale(0.9);
+    }
+}
+@media screen and (max-width: 840px){
+    .baraja-demo {
+        transform: scale(0.8);
+    }
+}
+.baraja-demo.vertOpened {
+    margin: 240px auto 200px;
+    padding-right: 150px;
+}
 .no-js .baraja-demo {
     width: auto
 }
@@ -300,17 +326,39 @@ a {
     border: 1px solid #ccc;
     border-radius: 10px
 }
-
+@media screen and (max-width: 740px){
+    #result {
+        width: 100%;
+    }
+}
+@media screen and (max-width: 680px){
+    #result {
+        padding: 32px;
+    }
+}
 #result div {
     margin-right: 43px;
     float: left
 }
-
+@media screen and (max-width: 680px){
+    #result div {
+        margin-right: 32px;
+    }
+}
+@media screen and (max-width: 600px){
+    #result div {
+        display: none;
+    }
+}
 #result span {
     margin-top: 22px;
     font-size: 14px
 }
-
+@media screen and (max-width: 680px){
+    #result span {
+        margin-top: 12px;
+    }
+}
 #result div h4 {
     bottom: 20px
 }
@@ -320,7 +368,11 @@ a {
     margin-bottom: 40px;
     font-size: 14px
 }
-
+@media screen and (max-width: 680px){
+    #result h4 {
+        margin-bottom: 24px;
+    }
+}
 #result p {
     font-size: 16px;
     text-align: justify
@@ -362,6 +414,13 @@ a {
     justify-content: space-between;
     gap: 16px;
     font-size: 16px;
+}
+@media screen and (max-width: 500px){
+    #tariffs > div {
+        flex-direction: column;
+        max-width: 250px;
+        margin: 0 auto;
+    }
 }
 #tariffs > div > div {
     border: 1px solid #aaa;

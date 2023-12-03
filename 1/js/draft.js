@@ -2145,6 +2145,14 @@ jQuery.fn.reverse = [].reverse;
             origin: {x: 50, y: 200},
             center: false,
             translation: 300
+        },
+        { // vert
+            speed: 500,
+            easing: 'ease-out',
+            range: 80,
+            direction: 'left',
+            origin: {x: 200, y: 50},
+            center: true
         }
     ];
     const WATCHES = 5;
@@ -2166,8 +2174,8 @@ jQuery.fn.reverse = [].reverse;
     message.text(serviceTr[0][lang]);
     reorderBtn.text(serviceTr[4][lang]);
     showResultBtn.text(serviceTr[5][lang]);
-    tgBotHint.html(serviceTr[10][lang]);
-    tgBotLink.html(serviceTr[11][lang]);
+    // tgBotHint.html(serviceTr[10][lang]);
+    // tgBotLink.html(serviceTr[11][lang]);
 
     data.forEach((card, i) => {
         i && $barajaEl.append('<li data-i=' + i + '><img src="https://goncharukvalera.github.io/cards/2/images/' + i + '.jpg" alt="' + data[i][lang].name + '"/><h4>' + data[i][lang].name + '</h4></li>');
@@ -2306,21 +2314,22 @@ jQuery.fn.reverse = [].reverse;
                     self._move2front($(this));
                     if (!isTop) {
                         $(this).addClass('flipped');
-                        const tgBotBonus = localStorage.getItem('bonus') === 'tgBotBonus';
+                        // const tgBotBonus = localStorage.getItem('bonus') === 'tgBotBonus';
                         if (watchesLeft === WATCHES) {
                             message.text(serviceTr[9][lang]);
                             showResultBtn.show();
                         } else {
-                            if (watchesLeft && (watchesLeft !== WATCHES) && tgBotBonus || userGroups.some(element => ['Personal', 'Standard', 'Business', 'Personal+', 'Standard+', 'Business+'].includes(element))) {
+                            if (watchesLeft/* && (watchesLeft !== WATCHES) && tgBotBonus*/ || userGroups.some(element => ['Personal', 'Standard', 'Business', 'Personal+', 'Standard+', 'Business+'].includes(element))) {
                                 message.text('');
                                 debugger
                                 showResultBtn.show();
                             } else {
-                                if (!tgBotBonus && watchesLeft) {
+                                /*if (!tgBotBonus && watchesLeft) {
                                     tgBotLink.addClass('df');
                                     tgBotHint.show();
+                                    $counter.hide();
                                     localStorage.setItem('url', location.href);
-                                }
+                                }*/
                                 if (!watchesLeft) {
                                     $counter.text(serviceTr[7][lang]);
                                 }
@@ -2430,10 +2439,13 @@ jQuery.fn.reverse = [].reverse;
             // if it's the one with higher z-index, just close the baraja
             if (!this.closed) {
                 this._close(callback, $item);
+                $('.baraja-demo').removeClass('vertOpened');
             } else {
-                // debugger
                 // this._fan(fanConfig[Math.floor(Math.random()*fanConfig.length)]);
-                this._fan(fanConfig[5]);
+                this._fan(fanConfig[window.innerWidth >= 800 ? 5 : 9]); // 9 - vert
+                if (window.innerWidth < 800) {
+                    $('.baraja-demo').addClass('vertOpened');
+                }
                 message.text(serviceTr[2][lang]);
             }
             if (isTop) {
@@ -2960,7 +2972,7 @@ jQuery.fn.reverse = [].reverse;
         const login = localStorage.getItem('email'),
             name = localStorage.getItem('userName'),
             bonus = localStorage.getItem('bonus');
-        if (bonus === 'tgBotBonus' && document.referrer.includes('tgBotBonus') && name && login &&
+        if (/*bonus === 'tgBotBonus' && document.referrer.includes('tgBotBonus') && */name && login &&
             !userGroups.some(element => ['Personal', 'Standard', 'Business', 'Personal+', 'Standard+', 'Business+'].includes(element))
             /*|| location.hostname === 'localhost'*/) {
             $counter.show();
@@ -2989,7 +3001,7 @@ jQuery.fn.reverse = [].reverse;
         }
     });
 
-    if (localStorage.getItem('bonus') === 'tgBotBonus' || userGroups.some(element => ['Personal', 'Standard', 'Business', 'Personal+', 'Standard+', 'Business+'].includes(element))) {
+    if (/*localStorage.getItem('bonus') === 'tgBotBonus' || */userGroups.some(element => ['Personal', 'Standard', 'Business', 'Personal+', 'Standard+', 'Business+'].includes(element))) {
         tgBotLink.removeClass('df');
         tgBotHint.hide();
     }
