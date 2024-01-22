@@ -364,6 +364,7 @@ a {
 }
 
 #result h4 {
+    text-transform: uppercase;
     margin-top: 8px;
     margin-bottom: 40px;
     font-size: 14px
