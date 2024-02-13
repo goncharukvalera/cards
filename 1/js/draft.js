@@ -2316,8 +2316,11 @@ jQuery.fn.reverse = [].reverse;
                         $(this).addClass('flipped');
                         // const tgBotBonus = localStorage.getItem('bonus') === 'tgBotBonus';
                         if (watchesLeft === WATCHES) {
-                            message.text(serviceTr[9][lang]);
-                            showResultBtn.show();
+                            // message.text(serviceTr[9][lang]);
+                            // showResultBtn.show();
+                            if (!localStorage.getItem('email')) {
+                                $('[class*=clientContactsFor] .t-popup').fadeIn(300);
+                            }
                         } else {
                             if (watchesLeft/* && (watchesLeft !== WATCHES) && tgBotBonus*/ || userGroups.some(element => ['Personal', 'Standard', 'Business', 'Personal+', 'Standard+', 'Business+'].includes(element))) {
                                 message.text('');
@@ -2935,11 +2938,13 @@ jQuery.fn.reverse = [].reverse;
             setTimeout(() => {
                 const $block = $($form?.closest('[class*=uc-tariff]')),
                     tariff = $block?.length && $block.attr('class')?.replace(/^.*uc-tariff/, '') || '';
-                $('[class*=uc-tariff] .t-popup').fadeOut(300);
-                localStorage.setItem('referrer', location.href);
-                $popup.find('.vh-popup-content').prepend(`<p>${tariffsTr[7][lang]}</p>`);
-                $popup.find(`a.tariff${tariff}`).text(`${tariffsTr[6][lang]} ${tariff}`).show();
-                setTimeout(() => $popup.addClass('df'), 500);
+                if (tariff) {
+                    $('[class*=uc-tariff] .t-popup').fadeOut(300);
+                    localStorage.setItem('referrer', location.href);
+                    $popup.find('.vh-popup-content').prepend(`<p>${tariffsTr[7][lang]}</p>`);
+                    $popup.find(`a.tariff${tariff}`).text(`${tariffsTr[6][lang]} ${tariff}`).show();
+                    setTimeout(() => $popup.addClass('df'), 500);
+                }
             }, 500);
         }
         /*
@@ -3041,8 +3046,8 @@ jQuery.fn.reverse = [].reverse;
     showResultBtn.on('click', function () {
         // $(this).removeAttr('disabled');
         if (watchesLeft === WATCHES && !localStorage.getItem('email')) {
-            $('[class*=clientContactsFor] .t-popup').fadeIn(300);
-            showResultBtn.hide();
+            // $('[class*=clientContactsFor] .t-popup').fadeIn(300);
+            // showResultBtn.hide();
         } else {
             watchesLeft--;
             if (!watchesLeft && !userGroups.some(element => ['Personal', 'Standard', 'Business', 'Personal+', 'Standard+', 'Business+'].includes(element))) {
