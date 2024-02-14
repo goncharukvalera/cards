@@ -2178,7 +2178,7 @@ jQuery.fn.reverse = [].reverse;
     // tgBotLink.html(serviceTr[11][lang]);
 
     data.forEach((card, i) => {
-        i && $barajaEl.append('<li data-i=' + i + '><img src="https://goncharukvalera.github.io/cards/2/images/' + i + '.jpg" alt="' + data[i][lang].name + '"/><h4>' + data[i][lang].name + '</h4></li>');
+        i && $barajaEl.append('<li data-i=' + i + '><img src="https://goncharukvalera.github.io/cards/2/images/' + i + '.jpg" alt="' + (data[i] ? data[i][lang].name : '') + '"/><h4>' + (data[i] ? data[i][lang].name : '') + '</h4></li>');
     });
     $.Baraja = function (options, element) {
         this.$el = $(element);
@@ -2313,15 +2313,13 @@ jQuery.fn.reverse = [].reverse;
                 if (!self.isAnimating) {
                     self._move2front($(this));
                     if (!isTop) {
-                        $(this).addClass('flipped');
                         // const tgBotBonus = localStorage.getItem('bonus') === 'tgBotBonus';
-                        if (watchesLeft === WATCHES) {
+                        if (watchesLeft === WATCHES && !localStorage.getItem('email')) {
                             // message.text(serviceTr[9][lang]);
                             // showResultBtn.show();
-                            if (!localStorage.getItem('email')) {
-                                $('[class*=clientContactsFor] .t-popup').fadeIn(300);
-                            }
+                            $('[class*=clientContactsFor] .t-popup').fadeIn(300);
                         } else {
+                            $(this).addClass('flipped');
                             if (watchesLeft/* && (watchesLeft !== WATCHES) && tgBotBonus*/ || userGroups.some(element => ['Personal', 'Standard', 'Business', 'Personal+', 'Standard+', 'Business+'].includes(element))) {
                                 message.text('');
                                 debugger
@@ -3027,7 +3025,7 @@ jQuery.fn.reverse = [].reverse;
     const showResult = () => {
         showResultBtn.hide();
         let i = $('.flipped').data('i');
-        $('#result').html('<div><img src="https://goncharukvalera.github.io/cards/2/images/' + i + '.jpg" alt="' + data[i][lang].name + '"/><h4>' + data[i][lang]?.name + '</h4></div><span>' + serviceTr[3][lang] + ':</span><h4>' + data[i][lang]?.name + '</h4><p>' + data[i][lang]?.descr + '</p>').slideDown();
+        $('#result').html('<div><img src="https://goncharukvalera.github.io/cards/2/images/' + i + '.jpg" alt="' + (data[i] ? data[i][lang]?.name : '') + '"/><h4>' + (data[i] ? data[i][lang]?.name : '') + '</h4></div><span>' + serviceTr[3][lang] + ':</span><h4>' + (data[i] ? data[i][lang]?.name : '') + '</h4><p>' + (data[i] ? data[i][lang]?.descr : '') + '</p>').slideDown();
 
         if (rec?.id) {
             $.ajax({
@@ -3089,18 +3087,23 @@ jQuery.fn.reverse = [].reverse;
     // fix for reload after back in browser
 
     // reset flow
+    const $loading = $('#loading');
     $('#resetFlowBtn').on('click', function () {
         const urlMocapi = 'https://64e680cb09e64530d1800ac4.mockapi.io';
+        $loading.show();
         $.getJSON('https://api.ipify.org?format=json', data => {
             const ip = data.ip;
             $.getJSON(`${urlMocapi}/ips`, data => {
-                data.forEach(rec => {
-                    if (rec.ip === ip) {
+                const curIpRecords = data?.filter(rec => rec.ip === ip);
+                if (curIpRecords?.length) {
+                    curIpRecords.forEach(rec => {
                         fetch(`https://64e680cb09e64530d1800ac4.mockapi.io/ips/${rec.id}`, {
                             method: 'DELETE',
                         }).then(res => {
                             if (res.ok) {
                                 localStorage.clear();
+                                $loading.hide();
+                                alert('Data successfully cleared. Back to previous page and reload page before continue');
                                 return res.json();
                             }
                             console.log('Error when try to delete IP record');
@@ -3109,9 +3112,11 @@ jQuery.fn.reverse = [].reverse;
                         }).catch(error => {
                             console.log('Unhandled error when try to delete IP record');
                         });
-                    }
-                });
-
+                    });
+                } else {
+                    $loading.hide();
+                    alert('Data for this user already cleared. Back to previous page and reload page before continue');
+                }
             });
         });
     });
