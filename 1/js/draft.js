@@ -2889,7 +2889,8 @@ jQuery.fn.reverse = [].reverse;
                 setTimeout(() => {
                     $('[class*=clientContactsFor] .t-popup').fadeOut(300);
                     watchesLeft--;
-                    showResult();
+                    $counter.show();
+                    // showResult();
                 }, 500);
             }
         }, 500);
@@ -3114,6 +3115,7 @@ jQuery.fn.reverse = [].reverse;
                         });
                     });
                 } else {
+                    localStorage.clear();
                     $loading.hide();
                     alert('Data for this user already cleared. Back to previous page and reload page before continue');
                 }
