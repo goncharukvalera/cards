@@ -2888,7 +2888,7 @@ jQuery.fn.reverse = [].reverse;
                 // console.log('success', email, userName);
                 setTimeout(() => {
                     $('[class*=clientContactsFor] .t-popup').fadeOut(300);
-                    watchesLeft--;
+                    // watchesLeft--;
                     $counter.show();
                     // showResult();
                 }, 500);
