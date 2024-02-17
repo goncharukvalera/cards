@@ -2320,6 +2320,7 @@ jQuery.fn.reverse = [].reverse;
                             $('[class*=clientContactsFor] .t-popup').fadeIn(300);
                         } else {
                             $(this).addClass('flipped');
+                            watchesLeft--;
                             if (watchesLeft/* && (watchesLeft !== WATCHES) && tgBotBonus*/ || userGroups.some(element => ['Personal', 'Standard', 'Business', 'Personal+', 'Standard+', 'Business+'].includes(element))) {
                                 message.text('');
                                 debugger
@@ -3048,7 +3049,6 @@ jQuery.fn.reverse = [].reverse;
             // $('[class*=clientContactsFor] .t-popup').fadeIn(300);
             // showResultBtn.hide();
         } else {
-            watchesLeft--;
             if (!watchesLeft && !userGroups.some(element => ['Personal', 'Standard', 'Business', 'Personal+', 'Standard+', 'Business+'].includes(element))) {
                 $counter.text(serviceTr[7][lang]);
                 $(this).attr('disabled', 'disabled');
