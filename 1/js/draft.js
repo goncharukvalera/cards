@@ -3028,7 +3028,7 @@ jQuery.fn.reverse = [].reverse;
     const showResult = () => {
         showResultBtn.hide();
         let i = $('.flipped').data('i');
-        $('#result').html('<div><img src="https://goncharukvalera.github.io/cards/2/images/' + i + '.jpg" alt="' + (data[i] ? data[i][lang]?.name : '') + '"/><h4>' + (data[i] ? data[i][lang]?.name : '') + '</h4></div><span>' + serviceTr[3][lang] + ':</span><h4>' + (data[i] ? data[i][lang]?.name : '') + '</h4><p>' + (data[i] ? data[i][lang]?.descr : '') + '</p>').slideDown();
+        $('#result').html('<div><img src="https://goncharukvalera.github.io/cards/2/images/' + i + '.jpg" alt="' + (data[i] ? data[i][lang]?.name : '') + '"/><h4>' + (data[i] ? data[i][lang]?.name : '') + '</h4></div><span>' + serviceTr[3][lang] + ':</span><h4>' + (data[i] ? data[i][lang]?.name : '') + '</h4><p>' + (data[i] ? data[i][lang]?.descr : '') + '</p>');
 
         if (rec?.id) {
             $.ajax({
