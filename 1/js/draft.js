@@ -2321,6 +2321,7 @@ jQuery.fn.reverse = [].reverse;
                         } else {
                             $(this).addClass('flipped');
                             watchesLeft--;
+                            showResult();
                             if (watchesLeft/* && (watchesLeft !== WATCHES) && tgBotBonus*/ || userGroups.some(element => ['Personal', 'Standard', 'Business', 'Personal+', 'Standard+', 'Business+'].includes(element))) {
                                 message.text('');
                                 debugger
