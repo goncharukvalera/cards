@@ -2321,7 +2321,7 @@ jQuery.fn.reverse = [].reverse;
                         } else {
                             $(this).addClass('flipped');
                             watchesLeft--;
-                            showResult();
+                            setCount(watchesLeft);
                             if (watchesLeft/* && (watchesLeft !== WATCHES) && tgBotBonus*/ || userGroups.some(element => ['Personal', 'Standard', 'Business', 'Personal+', 'Standard+', 'Business+'].includes(element))) {
                                 message.text('');
                                 debugger
@@ -3028,7 +3028,7 @@ jQuery.fn.reverse = [].reverse;
     const showResult = () => {
         showResultBtn.hide();
         let i = $('.flipped').data('i');
-        $('#result').html('<div><img src="https://goncharukvalera.github.io/cards/2/images/' + i + '.jpg" alt="' + (data[i] ? data[i][lang]?.name : '') + '"/><h4>' + (data[i] ? data[i][lang]?.name : '') + '</h4></div><span>' + serviceTr[3][lang] + ':</span><h4>' + (data[i] ? data[i][lang]?.name : '') + '</h4><p>' + (data[i] ? data[i][lang]?.descr : '') + '</p>');
+        $('#result').html('<div><img src="https://goncharukvalera.github.io/cards/2/images/' + i + '.jpg" alt="' + (data[i] ? data[i][lang]?.name : '') + '"/><h4>' + (data[i] ? data[i][lang]?.name : '') + '</h4></div><span>' + serviceTr[3][lang] + ':</span><h4>' + (data[i] ? data[i][lang]?.name : '') + '</h4><p>' + (data[i] ? data[i][lang]?.descr : '') + '</p>').slideDown();
 
         if (rec?.id) {
             $.ajax({
@@ -3098,14 +3098,16 @@ jQuery.fn.reverse = [].reverse;
             $.getJSON(`${urlMocapi}/ips`, data => {
                 const curIpRecords = data?.filter(rec => rec.ip === ip);
                 if (curIpRecords?.length) {
-                    curIpRecords.forEach(rec => {
+                    curIpRecords.forEach((rec, idx) => {
                         fetch(`https://64e680cb09e64530d1800ac4.mockapi.io/ips/${rec.id}`, {
                             method: 'DELETE',
                         }).then(res => {
                             if (res.ok) {
                                 localStorage.clear();
                                 $loading.hide();
-                                alert('Data successfully cleared. Back to previous page and reload page before continue');
+                                if (curIpRecords?.length - 1 === idx) {
+                                    alert('Data successfully cleared. Back to previous page and reload page before continue');
+                                }
                                 return res.json();
                             }
                             console.log('Error when try to delete IP record');
