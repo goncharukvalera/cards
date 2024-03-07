@@ -529,3 +529,12 @@ a {
     transform: rotate(45deg);
     margin: -8px;
 }
+/*8 March*/
+#tariffs .march8 {
+    margin-bottom: 16px;
+    /*display: none;!*uncomment*!*/
+}
+#tariffs > div:not(.march8) {
+    display: none;
+}
+/*8 March*/
